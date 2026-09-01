@@ -1,0 +1,153 @@
+/*
+===============================================================================
+DDL Script: Create Gold Tables
+===============================================================================
+Script Purpose:
+    This script creates Tables for the Gold layer in the data warehouse. 
+    The Gold layer represents the final dimension and fact tables (Galaxy Schema)
+
+    Each Table performs transformations and combines data from the Silver layer 
+    to produce a clean, enriched, and business-ready dataset.
+
+Usage:
+    - These Tables can be queried directly for analytics and reporting.
+===============================================================================
+*/
+
+-- =============================================================================
+-- Create Dimension: gold.dim_customers
+-- =============================================================================
+
+CREATE TABLE gold.dim_customers (
+    customer_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    customer_id VARCHAR(50),
+    customer_unique_id VARCHAR(50),
+    zip_code INT,
+    city VARCHAR(50),
+    state VARCHAR(50),
+    dwh_create_date DATETIME
+);
+
+
+-- =============================================================================
+-- Create Dimension: gold.dim_location
+-- =============================================================================
+
+CREATE TABLE gold.dim_location (
+    location_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    zip_code INT,
+    latitude DECIMAL(10,6),
+    longitude DECIMAL(10,6),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    dwh_create_date DATETIME
+);
+
+-- =============================================================================
+-- Create Dimension: gold.dim_sellers
+-- =============================================================================
+
+CREATE TABLE gold.dim_sellers (
+    seller_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    seller_id VARCHAR(50),
+    zip_code INT,
+    city VARCHAR(50),
+    state VARCHAR(50),
+    dwh_create_date DATETIME
+);
+
+
+
+-- =============================================================================
+-- Create Dimension: gold.dim_product_categories
+-- =============================================================================
+
+CREATE TABLE gold.dim_product_categories (
+    product_category_id BIGINT PRIMARY KEY,
+    product_category_name VARCHAR(50),
+    product_category_name_engilsh VARCHAR(50),
+    dwh_create_date DATETIME
+);
+
+
+-- =============================================================================
+-- Create Dimension: gold.dim_products
+-- =============================================================================
+
+CREATE TABLE olist_dwh.gold.dim_products (
+    product_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    product_id VARCHAR(50) NOT NULL,
+    product_category_id BIGINT,
+    weight_g INT,
+    length_cm INT,
+    height_cm INT,
+    width_cm INT,
+    dwh_create_date DATETIME
+);
+
+-- =============================================================================
+-- Create Fact: gold.fact_orders
+-- =============================================================================
+
+
+CREATE TABLE gold.fact_orders (
+	order_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    order_id VARCHAR(50) NOT NULL,
+	customer_sk BIGINT NOT NULL,
+	order_status VARCHAR(50),
+	purchase_date DATE,
+	approved_date DATE,
+	delivered_carrier_date DATE,
+	expected_delivery_date DATE,
+	delivered_customer_date DATE,
+	dwh_create_date datetime
+);
+
+
+-- =============================================================================
+-- Create Fact: gold.fact_order_items
+-- =============================================================================
+
+CREATE TABLE gold.fact_order_items (
+    order_item_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    order_sk BIGINT NOT NULL,
+    order_item_id INT NOT NULL,
+    product_sk BIGINT NOT NULL,
+    seller_sk BIGINT NOT NULL,
+    shipping_limit_date DATE,
+    price DECIMAL(10,2),
+    freight_value DECIMAL(10,2),
+    dwh_create_date DATETIME
+);
+
+
+-- =============================================================================
+-- Create Fact: gold.fact_order_payments
+-- =============================================================================
+
+CREATE TABLE gold.fact_order_payments (
+    order_payment_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    order_sk BIGINT NOT NULL,
+    payment_sequential INT,
+    payment_type VARCHAR(50),
+    payment_installments INT,
+    payment_value DECIMAL(10,2),
+    dwh_create_date DATETIME
+);
+
+
+-- =============================================================================
+-- Create Fact: gold.fact_order_reviews
+-- =============================================================================
+
+CREATE TABLE gold.fact_order_reviews (
+    order_review_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    review_id VARCHAR(50) NOT NULL,
+    order_sk BIGINT NOT NULL,
+    review_score INT,
+    review_creation_date DATE,
+    review_answer_date DATE,
+    dwh_create_date DATETIME
+);
+
+
