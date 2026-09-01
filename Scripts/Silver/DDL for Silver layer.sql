@@ -119,7 +119,7 @@ go
 
 -- csv_product_categories
 create table silver.csv_product_Categories(
-product_Category_id int identity(1,1) primary key,
+product_category_id bigint identity(1,1) primary key,
 product_category_name varchar(225),
 product_category_name_english varchar(225),
 dwh_create_date datetime default getdate( )
