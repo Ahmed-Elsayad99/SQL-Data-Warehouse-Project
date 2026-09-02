@@ -31,7 +31,7 @@ INSERT INTO olist_dwh.gold.dim_customers (
     zip_code,
     city,
     state,
-    dwh_create_date
+    create_date
     )
 
 SELECT
@@ -42,33 +42,6 @@ SELECT
     customer_state,
     dwh_create_date
 FROM olist_dwh.silver.crm_customers;
-
-
--- ================================================================================================== --
-
-Print 'Truncating Table: olist_dwh.gold.dim_location';
-Truncate Table olist_dwh.gold.dim_location;
-Print 'Inserting Data Into: olist_dwh.gold.dim_location';
-
-
-INSERT INTO olist_dwh.gold.dim_location (
-    zip_code,
-    latitude,
-    longitude,
-    city,
-    state,
-    dwh_create_date 
-    )
-
-SELECT
-    geolocation_zip_code_prefix,
-    geolocation_lat,
-    geolocation_lng,
-    geolocation_city,
-    geolocation_state,
-    dwh_create_date
-FROM olist_dwh.silver.crm_geo_location;
-
 
 -- ================================================================================================== --
 
@@ -81,7 +54,7 @@ INSERT INTO olist_dwh.gold.dim_sellers (
     zip_code,
     city,
     state,
-    dwh_create_date 
+    create_date 
     )
 
 SELECT
@@ -103,7 +76,7 @@ INSERT INTO olist_dwh.gold.dim_product_categories (
     product_category_id,
     product_category_name,
     product_category_name_engilsh,
-    dwh_create_date 
+    create_date 
     )
 
 SELECT
@@ -126,7 +99,7 @@ INSERT INTO olist_dwh.gold.dim_products (
     length_cm,
     height_cm,
     width_cm,
-    dwh_create_date 
+    create_date 
     )
 
 SELECT
@@ -162,7 +135,7 @@ INSERT INTO olist_dwh.gold.fact_orders (
 	delivered_carrier_date,
 	expected_delivery_date,
 	delivered_customer_date,
-	dwh_create_date
+	create_date
 	)
 SELECT 
     o.order_id,
@@ -193,7 +166,7 @@ INSERT INTO olist_dwh.gold.fact_order_items (
     shipping_limit_date,
     price,
     freight_value,
-    dwh_create_date 
+    create_date 
     )
 
 SELECT
@@ -226,7 +199,7 @@ INSERT INTO olist_dwh.gold.fact_order_payments (
     payment_type,
     payment_installments,
     payment_value,
-    dwh_create_date 
+    create_date 
     )
 
 SELECT
@@ -253,7 +226,7 @@ INSERT INTO olist_dwh.gold.fact_order_reviews (
     review_score,
     review_creation_date,
     review_answer_date,
-    dwh_create_date 
+    create_date 
     )
 
 SELECT
