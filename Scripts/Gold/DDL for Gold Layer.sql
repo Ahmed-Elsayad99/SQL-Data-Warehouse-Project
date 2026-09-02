@@ -14,6 +14,19 @@ Usage:
 ===============================================================================
 */
 
+
+-- =============================================================================
+-- Create Dimension: gold.dim_location
+-- =============================================================================
+
+CREATE TABLE gold.dim_location (
+    location_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    city VARCHAR(50) NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    create_date DATETIME
+);
+
+
 -- =============================================================================
 -- Create Dimension: gold.dim_customers
 -- =============================================================================
@@ -22,9 +35,7 @@ CREATE TABLE gold.dim_customers (
     customer_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
     customer_id VARCHAR(50),
     customer_unique_id VARCHAR(50),
-    zip_code INT,
-    city VARCHAR(50),
-    state VARCHAR(50),
+    location_sk BIGINT,
     create_date DATETIME
 );
 
@@ -36,12 +47,9 @@ CREATE TABLE gold.dim_customers (
 CREATE TABLE gold.dim_sellers (
     seller_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
     seller_id VARCHAR(50),
-    zip_code INT,
-    city VARCHAR(50),
-    state VARCHAR(50),
+    location_sk BIGINT,
     create_date DATETIME
 );
-
 
 
 -- =============================================================================
