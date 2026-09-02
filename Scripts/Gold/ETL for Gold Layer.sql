@@ -20,6 +20,26 @@ Print '-----------------------------------------------------';
 Print 'Loading Dimension Tables';
 Print '-----------------------------------------------------';
 
+
+Print 'Truncating Table: olist_dwh.gold.dim_location';
+Truncate Table olist_dwh.gold.dim_location;
+Print 'Inserting Data Into: olist_dwh.gold.dim_location';
+
+INSERT INTO olist_dwh.gold.dim_location (
+    city,
+    state,
+    create_date
+)
+
+SELECT DISTINCT
+    geolocation_city,
+    geolocation_state,
+    dwh_create_date
+FROM olist_dwh.silver.crm_geo_location;
+
+
+-- ================================================================================================== --
+
 Print 'Truncating Table: olist_dwh.gold.dim_customers';
 Truncate Table olist_dwh.gold.dim_customers;
 Print 'Inserting Data Into: olist_dwh.gold.dim_customers';
@@ -28,20 +48,20 @@ Print 'Inserting Data Into: olist_dwh.gold.dim_customers';
 INSERT INTO olist_dwh.gold.dim_customers (
     customer_id,
     customer_unique_id,
-    zip_code,
-    city,
-    state,
+    location_sk,
     create_date
     )
 
 SELECT
-    customer_id,
-    customer_unique_id,
-    customer_zip_code_prefix,
-    customer_city,
-    customer_state,
-    dwh_create_date
-FROM olist_dwh.silver.crm_customers;
+    c.customer_id,
+    c.customer_unique_id,
+    l.location_sk,
+    c.dwh_create_date
+FROM olist_dwh.silver.crm_customers c
+LEFT JOIN olist_dwh.gold.dim_location l
+    ON c.customer_city = l.city
+    AND c.customer_state = l.state;
+
 
 -- ================================================================================================== --
 
@@ -51,20 +71,18 @@ Print 'Inserting Data Into: olist_dwh.gold.dim_sellers';
 
 INSERT INTO olist_dwh.gold.dim_sellers (
     seller_id,
-    zip_code,
-    city,
-    state,
+    location_sk,
     create_date 
     )
 
 SELECT
-    seller_id,
-    seller_zip_code_prefix,
-    seller_city,
-    seller_state,
-    dwh_create_date
-FROM olist_dwh.silver.csv_sellers;
-
+    s.seller_id,
+    l.location_sk,
+    s.dwh_create_date
+FROM olist_dwh.silver.csv_sellers s
+LEFT JOIN olist_dwh.gold.dim_location l
+    ON s.seller_city = l.city
+    AND s.seller_state = l.state;
 
 -- ================================================================================================== --
 
