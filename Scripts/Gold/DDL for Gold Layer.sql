@@ -25,7 +25,7 @@ CREATE TABLE gold.dim_customers (
     zip_code INT,
     city VARCHAR(50),
     state VARCHAR(50),
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 
@@ -40,7 +40,7 @@ CREATE TABLE gold.dim_location (
     longitude DECIMAL(10,6),
     city VARCHAR(50),
     state VARCHAR(50),
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 -- =============================================================================
@@ -53,7 +53,7 @@ CREATE TABLE gold.dim_sellers (
     zip_code INT,
     city VARCHAR(50),
     state VARCHAR(50),
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 
@@ -66,7 +66,7 @@ CREATE TABLE gold.dim_product_categories (
     product_category_id BIGINT PRIMARY KEY,
     product_category_name VARCHAR(50),
     product_category_name_engilsh VARCHAR(50),
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 
@@ -82,7 +82,7 @@ CREATE TABLE olist_dwh.gold.dim_products (
     length_cm INT,
     height_cm INT,
     width_cm INT,
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 -- =============================================================================
@@ -100,7 +100,7 @@ CREATE TABLE gold.fact_orders (
 	delivered_carrier_date DATE,
 	expected_delivery_date DATE,
 	delivered_customer_date DATE,
-	dwh_create_date datetime
+	create_date datetime
 );
 
 
@@ -117,7 +117,7 @@ CREATE TABLE gold.fact_order_items (
     shipping_limit_date DATE,
     price DECIMAL(10,2),
     freight_value DECIMAL(10,2),
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 
@@ -132,7 +132,7 @@ CREATE TABLE gold.fact_order_payments (
     payment_type VARCHAR(50),
     payment_installments INT,
     payment_value DECIMAL(10,2),
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 
@@ -147,7 +147,7 @@ CREATE TABLE gold.fact_order_reviews (
     review_score INT,
     review_creation_date DATE,
     review_answer_date DATE,
-    dwh_create_date DATETIME
+    create_date DATETIME
 );
 
 
