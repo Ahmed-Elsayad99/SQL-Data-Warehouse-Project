@@ -30,20 +30,6 @@ CREATE TABLE gold.dim_customers (
 
 
 -- =============================================================================
--- Create Dimension: gold.dim_location
--- =============================================================================
-
-CREATE TABLE gold.dim_location (
-    location_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
-    zip_code INT,
-    latitude DECIMAL(10,6),
-    longitude DECIMAL(10,6),
-    city VARCHAR(50),
-    state VARCHAR(50),
-    create_date DATETIME
-);
-
--- =============================================================================
 -- Create Dimension: gold.dim_sellers
 -- =============================================================================
 
