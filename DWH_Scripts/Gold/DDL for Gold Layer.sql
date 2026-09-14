@@ -91,7 +91,7 @@ CREATE TABLE gold.fact_orders (
 	order_status VARCHAR(50),
 	purchase_date DATE,
 	approved_date DATE,
-	delivered_carrier_date DATE,
+	shipping_date DATE,
 	expected_delivery_date DATE,
 	delivered_customer_date DATE,
 	create_date datetime
