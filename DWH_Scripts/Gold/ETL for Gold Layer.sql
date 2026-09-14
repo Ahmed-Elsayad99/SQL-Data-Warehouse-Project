@@ -150,7 +150,7 @@ INSERT INTO olist_dwh.gold.fact_orders (
 	order_status,
 	purchase_date,
 	approved_date,
-	delivered_carrier_date,
+	shipping_date,
 	expected_delivery_date,
 	delivered_customer_date,
 	create_date
@@ -161,7 +161,7 @@ SELECT
 	o.order_status,
 	CAST(o.order_purchase_timestamp AS DATE) AS purchase_date,
 	CAST(o.order_approved_at AS DATE) AS approved_date,
-	CAST(o.order_delivered_carrier_date AS DATE) AS delivered_carrier_date,
+	CAST(o.order_delivered_carrier_date AS DATE) AS shipping_date,
 	CAST(o.order_estimated_delivery_date AS DATE) AS expected_delivery_date,
 	CAST(o.order_delivered_customer_date AS DATE) AS delivered_customer_date,
     o.dwh_create_date
