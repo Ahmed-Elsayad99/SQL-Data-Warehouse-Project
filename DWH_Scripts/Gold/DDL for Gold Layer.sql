@@ -111,6 +111,7 @@ CREATE TABLE gold.fact_order_items (
     shipping_limit_date DATE,
     price DECIMAL(10,2),
     freight_value DECIMAL(10,2),
+	total_amount DECIMAL(10,2),
     create_date DATETIME
 );
 
