@@ -184,6 +184,7 @@ INSERT INTO olist_dwh.gold.fact_order_items (
     shipping_limit_date,
     price,
     freight_value,
+	total_amount,
     create_date 
     )
 
@@ -195,6 +196,7 @@ SELECT
     CAST(oi.shipping_limit_date AS DATE) AS shipping_limit_date,
     oi.price,
     oi.freight_value,
+	oi.price * oi.freight_value AS total_amount,
     oi.dwh_create_date
 FROM olist_dwh.silver.erp_order_items oi
 LEFT JOIN olist_dwh.gold.fact_orders o
