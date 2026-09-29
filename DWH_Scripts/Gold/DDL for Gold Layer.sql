@@ -18,10 +18,13 @@ Usage:
 -- Create Dimension: olist_dwh.gold.dim_location
 -- =============================================================================
 
-CREATE TABLE olist_dwh.gold.dim_location (
-    location_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
-    city VARCHAR(50) NOT NULL,
+CREATE TABLE olist_dwh.gold.dim_geo_location (
+    geo_location_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
+    zip_code_prefix BIGINT,
     state VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    latitude decimal(10,6),
+    longitude decimal(10,6),
     create_date DATETIME
 );
 
@@ -34,7 +37,7 @@ CREATE TABLE olist_dwh.gold.dim_customers (
     customer_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
     customer_id VARCHAR(50),
     customer_unique_id VARCHAR(50),
-    location_sk BIGINT,
+    geo_location_sk BIGINT,
     create_date DATETIME
 );
 
@@ -46,7 +49,7 @@ CREATE TABLE olist_dwh.gold.dim_customers (
 CREATE TABLE olist_dwh.gold.dim_sellers (
     seller_sk BIGINT IDENTITY(1,1) PRIMARY KEY,
     seller_id VARCHAR(50),
-    location_sk BIGINT,
+    geo_location_sk BIGINT,
     create_date DATETIME
 );
 
