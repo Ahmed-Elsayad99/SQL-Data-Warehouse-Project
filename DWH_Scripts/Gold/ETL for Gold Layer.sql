@@ -25,18 +25,23 @@ Print 'Truncating Table: olist_dwh.gold.dim_location';
 Truncate Table olist_dwh.gold.dim_location;
 Print 'Inserting Data Into: olist_dwh.gold.dim_location';
 
-INSERT INTO olist_dwh.gold.dim_location (
-    city,
+INSERT INTO olist_dwh.gold.dim_geo_location (
+    zip_code_prefix,
     state,
+    city,
+    latitude,
+    longitude,
     create_date
 )
 
-SELECT DISTINCT
-    geolocation_city,
+SELECT 
+    geolocation_zip_code_prefix,
     geolocation_state,
+    geolocation_city,
+    geolocation_lat,
+    geolocation_lng,
     dwh_create_date
 FROM olist_dwh.silver.crm_geo_location;
-
 
 -- ================================================================================================== --
 
@@ -45,22 +50,41 @@ Truncate Table olist_dwh.gold.dim_customers;
 Print 'Inserting Data Into: olist_dwh.gold.dim_customers';
 
 
+WITH Geo_Location As (
+    select
+        geo_location_sk,
+        zip_code_prefix,
+        state,
+        city,
+        ROW_NUMBER() OVER(
+           PARTITION BY 
+               zip_code_prefix,
+               state,
+               city
+           ORDER BY
+              geo_location_sk 
+        ) As n
+    from olist_dwh.gold.dim_geo_location
+)
+
 INSERT INTO olist_dwh.gold.dim_customers (
     customer_id,
     customer_unique_id,
-    location_sk,
+    geo_location_sk,
     create_date
     )
 
 SELECT
     c.customer_id,
     c.customer_unique_id,
-    l.location_sk,
+    l.geo_location_sk,
     c.dwh_create_date
 FROM olist_dwh.silver.crm_customers c
-LEFT JOIN olist_dwh.gold.dim_location l
-    ON c.customer_city = l.city
-    AND c.customer_state = l.state;
+LEFT JOIN Geo_Location l
+    ON c.customer_zip_code_prefix = l.zip_code_prefix
+    AND c.customer_city = l.city
+    AND c.customer_state = l.state
+    AND l.n = 1;
 
 
 -- ================================================================================================== --
@@ -69,20 +93,39 @@ Print 'Truncating Table: olist_dwh.gold.dim_sellers';
 Truncate Table olist_dwh.gold.dim_sellers;
 Print 'Inserting Data Into: olist_dwh.gold.dim_sellers';
 
+WITH Geo_Location As (
+    select
+        geo_location_sk,
+        zip_code_prefix,
+        state,
+        city,
+        ROW_NUMBER() OVER(
+           PARTITION BY 
+               zip_code_prefix,
+               state,
+               city
+           ORDER BY
+              geo_location_sk 
+        ) As n
+    from olist_dwh.gold.dim_geo_location
+)
+
 INSERT INTO olist_dwh.gold.dim_sellers (
     seller_id,
-    location_sk,
+    geo_location_sk,
     create_date 
     )
 
 SELECT
     s.seller_id,
-    l.location_sk,
+    l.geo_location_sk,
     s.dwh_create_date
 FROM olist_dwh.silver.csv_sellers s
-LEFT JOIN olist_dwh.gold.dim_location l
-    ON s.seller_city = l.city
-    AND s.seller_state = l.state;
+LEFT JOIN Geo_Location l
+    ON s.seller_zip_code_prefix = l.zip_code_prefix
+    AND s.seller_city = l.city
+    AND s.seller_state = l.state
+    AND l.n = 1;
 
 
 -- ================================================================================================== --
