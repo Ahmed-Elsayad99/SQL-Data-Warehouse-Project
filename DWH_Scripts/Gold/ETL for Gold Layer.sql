@@ -43,6 +43,13 @@ SELECT
     dwh_create_date
 FROM olist_dwh.silver.crm_geo_location;
 
+/*
+INSERT INTO olist_dwh.gold.dim_geo_location
+( geo_location_sk, zip_code_prefix, state, city, latitude, longitude, create_date)
+VALUES
+( 0, 0, 'Unknown', 'Unknown', 0, 0, GETDATE() );
+*/
+
 -- ================================================================================================== --
 
 Print 'Truncating Table: olist_dwh.gold.dim_customers';
@@ -77,7 +84,7 @@ INSERT INTO olist_dwh.gold.dim_customers (
 SELECT
     c.customer_id,
     c.customer_unique_id,
-    l.geo_location_sk,
+    COALESCE(l.geo_location_sk, 0) As geo_location_sk,
     c.dwh_create_date
 FROM olist_dwh.silver.crm_customers c
 LEFT JOIN Geo_Location l
@@ -118,7 +125,7 @@ INSERT INTO olist_dwh.gold.dim_sellers (
 
 SELECT
     s.seller_id,
-    l.geo_location_sk,
+    COALESCE(l.geo_location_sk, 0) As geo_location_sk,
     s.dwh_create_date
 FROM olist_dwh.silver.csv_sellers s
 LEFT JOIN Geo_Location l
